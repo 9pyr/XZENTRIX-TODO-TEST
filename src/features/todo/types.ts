@@ -12,4 +12,5 @@ export interface GetTodosResponse {
 
 export interface TodoVariables {
   isDone: boolean
+  userEmail: string
 }

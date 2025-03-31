@@ -3,6 +3,7 @@ import { gql } from "@apollo/client"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import NextAuth, { User } from "next-auth"
+import { HasuraAdapter } from "next-auth-hasura-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 const GET_USER_QUERY = gql`
@@ -83,6 +84,10 @@ const handler = NextAuth({
       },
     }),
   ],
+  adapter: HasuraAdapter({
+    endpoint: process.env.HASURA_PROJECT_ENDPOINT!,
+    adminSecret: process.env.HASURA_ADMIN_SECRET!,
+  }),
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
