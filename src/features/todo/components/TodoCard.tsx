@@ -21,7 +21,7 @@ const TodoCard = ({
   title,
   description,
   priority,
-  isDone,
+  is_done,
   className,
 }: TodoCardProps) => {
   const [updateTodo] = useUpdateTodoCompletion()
@@ -32,7 +32,7 @@ const TodoCard = ({
     await updateTodo({
       variables: {
         id,
-        isDone: !isDone,
+        is_done: !is_done,
       },
     })
   }
@@ -42,28 +42,28 @@ const TodoCard = ({
       className={cn(
         "w-full text-white",
         {
-          "bg-green-600": isDone,
-          "bg-sky-600": priority === "NORMAL" && !isDone,
-          "bg-orange-600": priority === "HIGH" && !isDone,
+          "bg-green-600": is_done,
+          "bg-sky-600": priority === "NORMAL" && !is_done,
+          "bg-orange-600": priority === "HIGH" && !is_done,
         },
         className
       )}
     >
       <CardHeader className="text-xs">
-        {isDone ? "DONE" : `${priority} PRIORITY`}
+        {is_done ? "DONE" : `${priority} PRIORITY`}
       </CardHeader>
       <CardContent className="flex items-center space-x-4 text-xl">
         <div className="w-full">{title}</div>
         <Checkbox
           id="terms"
           className={cn({
-            "border-green-900": isDone,
-            "border-sky-900": priority === "NORMAL" && !isDone,
-            "border-orange-900": priority === "HIGH" && !isDone,
+            "border-green-900": is_done,
+            "border-sky-900": priority === "NORMAL" && !is_done,
+            "border-orange-900": priority === "HIGH" && !is_done,
           })}
           onClick={handleUpdateTodo}
-          checked={isDone}
-          disabled={isDone}
+          checked={is_done}
+          disabled={is_done}
         />
       </CardContent>
       <CardFooter>

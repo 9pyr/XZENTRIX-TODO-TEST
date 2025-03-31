@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner"
 import type { Metadata } from "next"
 import {
   Geist,
@@ -49,6 +50,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${roboto.variable} ${robotoMono.variable} antialiased`}
       >
         <Provider>{children}</Provider>
+        <Toaster />
       </body>
     </html>
   )

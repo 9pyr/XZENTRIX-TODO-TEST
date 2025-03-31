@@ -9,7 +9,7 @@ import useGetTodos from "@/features/todo/hooks/useGetTodos"
 import { isEmpty } from "lodash"
 
 const DoneTasks = () => {
-  const { data: doneTasks, loading } = useGetTodos({ isDone: true })
+  const { data: doneTasks, loading } = useGetTodos({ is_done: true })
 
   const [deleteTodo, { loading: deleteLoading }] = useDeleteTodo()
 
@@ -37,7 +37,7 @@ const DoneTasks = () => {
           DONE TASKS
         </div>
         {doneTasks?.todos?.map(
-          ({ id, title, description, priority, isDone }, index) => (
+          ({ id, title, description, priority, is_done }, index) => (
             <Modal
               key={`${id}-${index}`}
               title="Update task"
@@ -48,7 +48,7 @@ const DoneTasks = () => {
                     title={title}
                     description={description}
                     priority={priority}
-                    isDone={isDone}
+                    is_done={is_done}
                     className="cursor-pointer"
                   />
                 </div>

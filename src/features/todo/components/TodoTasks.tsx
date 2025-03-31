@@ -11,7 +11,7 @@ import { Todo } from "@/features/todo/types"
 import { isEmpty } from "lodash"
 
 const TodoTasks = () => {
-  const { data: todoTasks, loading } = useGetTodos({ isDone: false })
+  const { data: todoTasks, loading } = useGetTodos({ is_done: false })
 
   const [deleteTodo, { loading: deleteLoading }] = useDeleteTodo()
 
@@ -54,7 +54,7 @@ const TodoTasks = () => {
         TODO TASKS
       </div>
       {todoTasks.todos.map(
-        ({ id, title, description, priority, isDone }, index) => (
+        ({ id, title, description, priority, is_done }, index) => (
           <Modal
             key={`${id}-${index}`}
             title="Update task"
@@ -65,7 +65,7 @@ const TodoTasks = () => {
                   title={title}
                   description={description}
                   priority={priority}
-                  isDone={isDone}
+                  is_done={is_done}
                   className="cursor-pointer"
                 />
               </div>

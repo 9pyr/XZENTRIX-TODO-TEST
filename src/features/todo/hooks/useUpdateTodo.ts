@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client"
+import { toast } from "sonner"
 
 export const UPDATE_TODO = gql`
   mutation UpdateTodo(
@@ -22,7 +23,11 @@ export const UPDATE_TODO = gql`
 `
 
 const useUpdateTodo = () => {
-  return useMutation(UPDATE_TODO)
+  return useMutation(UPDATE_TODO, {
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 }
 
 export default useUpdateTodo

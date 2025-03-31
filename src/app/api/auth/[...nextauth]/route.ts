@@ -1,4 +1,4 @@
-import client from "@/lib/apolloClient"
+import serverApollo from "@/lib/apolloServer"
 import { gql } from "@apollo/client"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
@@ -23,6 +23,10 @@ interface ExtendedUser extends User {
 declare module "next-auth" {
   interface Session {
     accessToken?: string
+    user?: {
+      sub?: string
+      email?: string | null
+    }
   }
 }
 
@@ -45,41 +49,41 @@ const handler = NextAuth({
           throw new Error("Email and password are required")
         }
 
-        const { data } = await client.query({
+        const { data } = await serverApollo.query({
           query: GET_USER_QUERY,
           variables: { email },
         })
 
         if (data.users.length === 0) {
-          return null
+          throw new Error("User not found")
         }
 
         const user = data.users[0]
 
         const isPasswordValid = await bcrypt.compare(password, user.password)
 
-        if (isPasswordValid) {
-          const accessToken = jwt.sign(
-            {
-              sub: user.id,
-              email: user.email,
-              "https://hasura.io/jwt/claims": {
-                "x-hasura-allowed-roles": ["user"],
-                "x-hasura-default-role": "user",
-                "x-hasura-user-id": user.id,
-              },
-            },
-            process.env.NEXTAUTH_SECRET!,
-            { expiresIn: "1h" }
-          )
+        if (!isPasswordValid) {
+          throw new Error("Invalid email or password")
+        }
 
-          return {
-            id: user.id,
+        const accessToken = jwt.sign(
+          {
+            sub: user.id,
             email: user.email,
-            accessToken,
-          }
-        } else {
-          return null
+            "https://hasura.io/jwt/claims": {
+              "x-hasura-allowed-roles": ["user"],
+              "x-hasura-default-role": "user",
+              "x-hasura-user-id": user.id,
+            },
+          },
+          process.env.NEXTAUTH_SECRET!,
+          { expiresIn: "1h" }
+        )
+
+        return {
+          id: user.id,
+          email: user.email,
+          accessToken,
         }
       },
     }),
@@ -96,6 +100,9 @@ const handler = NextAuth({
       return token
     },
     async session({ session, token }) {
+      if (session.user) {
+        session.user.sub = token.sub
+      }
       session.accessToken = token.accessToken as string | undefined
       return session
     },

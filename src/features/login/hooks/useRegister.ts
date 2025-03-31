@@ -1,16 +1,14 @@
-import { gql, useMutation } from "@apollo/client"
-
-const REGISTER_USER = gql`
-  mutation RegisterUser($email: String!, $password: String!) {
-    insert_users_one(object: { email: $email, password: $password }) {
-      id
-      email
-    }
-  }
-`
+import { register } from "@/lib/apis/login"
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 const useRegister = () => {
-  return useMutation(REGISTER_USER)
+  return useMutation({
+    mutationFn: register,
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 }
 
 export default useRegister

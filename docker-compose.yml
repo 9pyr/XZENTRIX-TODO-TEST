@@ -1,25 +1,6 @@
 services:
-  hasura-cli:
-    image: hasura/graphql-engine:v2.36.0
-    volumes:
-      - ./hasura:/hasura
-    working_dir: /hasura
-    entrypoint:
-      [
-        "hasura",
-        "migrate",
-        "create",
-        "init",
-        "--database-name",
-        "default",
-        "--from-server",
-      ]
-    depends_on:
-      - postgres
-      - hasura
-
   postgres:
-    image: postgres:14
+    image: postgres:15
     restart: always
     environment:
       POSTGRES_USER: hasura
@@ -31,7 +12,7 @@ services:
       - "5432:5432"
 
   hasura:
-    image: hasura/graphql-engine:v2.36.0
+    build: .
     restart: always
     ports:
       - "8080:8080"
@@ -39,29 +20,10 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://hasura:hasura@postgres:5432/hasura_db
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
-      HASURA_GRAPHQL_ADMIN_SECRET: "myadminsecret"
+      HASURA_GRAPHQL_ADMIN_SECRET: "hasura-secret-key"
       HASURA_GRAPHQL_ENABLE_SUBSCRIPTIONS: "true"
       HASURA_GRAPHQL_JWT_SECRET: '{"type": "HS256", "key": "cxrTw8mVQ1F2ePEiQ7hiWxF9_65Fk2fVH8nte4fx8pc"}'
-      HASURA_GRAPHQL_MIGRATIONS_DIR: "/hasura-migrations"
-      HASURA_GRAPHQL_METADATA_DIR: "/hasura-metadata"
-    volumes:
-      - ./hasura/migrations:/hasura-migrations
-      - ./hasura/metadata:/hasura-metadata
     depends_on:
-      - postgres
-
-  migrations:
-    image: hasura/graphql-engine:v2.36.0
-    restart: on-failure
-    environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://hasura:hasura@postgres:5432/hasura_db
-      HASURA_GRAPHQL_ADMIN_SECRET: "myadminsecret"
-    volumes:
-      - ./hasura/migrations:/hasura-migrations
-      - ./hasura/metadata:/hasura-metadata
-    entrypoint: ["hasura", "migrate", "apply", "--database-name", "default"]
-    depends_on:
-      - hasura
       - postgres
 
 volumes:

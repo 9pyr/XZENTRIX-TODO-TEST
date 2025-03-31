@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client"
+import { toast } from "sonner"
 
 export const DELETE_TODO = gql`
   mutation DeleteTodo($id: uuid!) {
@@ -11,7 +12,11 @@ export const DELETE_TODO = gql`
 `
 
 const useDeleteTodo = () => {
-  return useMutation(DELETE_TODO)
+  return useMutation(DELETE_TODO, {
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 }
 
 export default useDeleteTodo

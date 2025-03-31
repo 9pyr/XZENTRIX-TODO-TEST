@@ -22,7 +22,7 @@ const CreateTodoDialog = () => {
         title,
         description,
         priority,
-        userEmail: session?.user?.email,
+        user_id: session?.user?.sub,
       },
     })
   }

@@ -3,7 +3,7 @@ export interface Todo {
   title: string
   description: string
   priority: "NORMAL" | "HIGH"
-  isDone?: boolean
+  is_done?: boolean
 }
 
 export interface GetTodosResponse {
@@ -11,6 +11,5 @@ export interface GetTodosResponse {
 }
 
 export interface TodoVariables {
-  isDone: boolean
-  userEmail: string
+  is_done: boolean
 }

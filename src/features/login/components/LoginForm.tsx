@@ -12,22 +12,24 @@ import { LoginFormData } from "@/features/login/types"
 import { LoginSchema } from "@/features/login/utils/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
+import { redirect } from "next/navigation"
+import { toast } from "sonner"
 
 const LoginForm = () => {
   const handleLogin = async (values: LoginFormData) => {
     const { email, password } = values
 
-    try {
-      const res = await signIn("credentials", {
-        email,
-        password,
-        redirect: true,
-        callbackUrl: "/",
-      })
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    })
 
-      console.error(res?.error)
-    } catch (err) {
-      console.error(err)
+    if (!res?.ok) {
+      toast.error("Invalid email or password")
+    } else {
+      toast.success("Login successful")
+      redirect("/")
     }
   }
 

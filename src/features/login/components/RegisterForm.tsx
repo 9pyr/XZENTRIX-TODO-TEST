@@ -15,12 +15,17 @@ import { RegisterSchema } from "@/features/login/utils/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import bcrypt from "bcryptjs"
 import { redirect } from "next/navigation"
+import { toast } from "sonner"
 
-const RegisterForm = () => {
-  const [register, { loading, error }] = useRegister()
+interface RegisterFormProps {
+  setTab: (tab: "login" | "register") => void
+}
 
-  if (loading) return <OverlayLoading />
-  if (error) return <p>Error: {error.message}</p>
+const RegisterForm = ({ setTab }: RegisterFormProps) => {
+  const { mutateAsync, isPending, isError, error } = useRegister()
+
+  if (isPending) return <OverlayLoading />
+  if (isError) return <p>Error: {error.message}</p>
 
   const handleRegister = async (values: RegisterFormData) => {
     const { email, password } = values
@@ -28,8 +33,14 @@ const RegisterForm = () => {
     try {
       const hashedPassword = await bcrypt.hash(password, 10)
 
-      await register({ variables: { email, password: hashedPassword } })
-      alert("สมัครสมาชิกสำเร็จ!")
+      await mutateAsync({ email, password: hashedPassword })
+
+      setTab("login")
+      toast.success("Registration successful")
+
+      setTimeout(() => {
+        toast.info("Please login to continue")
+      }, 1000)
 
       redirect("/login")
     } catch (err) {

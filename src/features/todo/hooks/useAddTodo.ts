@@ -1,18 +1,19 @@
 import { gql, useMutation } from "@apollo/client"
+import { toast } from "sonner"
 
 export const ADD_TODO = gql`
   mutation AddTodo(
     $title: String!
     $description: String!
     $priority: String!
-    $userEmail: String!
+    $user_id: uuid!
   ) {
     insert_todos(
       objects: {
         title: $title
         description: $description
         priority: $priority
-        userEmail: $userEmail
+        user_id: $user_id
       }
     ) {
       returning {
@@ -20,14 +21,18 @@ export const ADD_TODO = gql`
         title
         description
         priority
-        userEmail
+        user_id
       }
     }
   }
 `
 
 const useAddTodo = () => {
-  return useMutation(ADD_TODO)
+  return useMutation(ADD_TODO, {
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 }
 
 export default useAddTodo
