@@ -42,7 +42,11 @@ const InputField = ({
               {!required && !disabled && <span>(ถ้ามี)</span>}
             </FormLabel>
             <FormControl>
-              <Input placeholder={placeholder} {...field} />
+              <Input
+                placeholder={placeholder}
+                {...field}
+                value={field.value ?? ""}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
