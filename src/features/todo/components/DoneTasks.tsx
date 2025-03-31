@@ -9,7 +9,9 @@ import useGetTodos from "@/features/todo/hooks/useGetTodos"
 import { isEmpty } from "lodash"
 
 const DoneTasks = () => {
-  const { data: doneTasks, loading } = useGetTodos({ is_done: true })
+  const { data: doneTasks, loading } = useGetTodos({
+    is_done: true,
+  })
 
   const [deleteTodo, { loading: deleteLoading }] = useDeleteTodo()
 

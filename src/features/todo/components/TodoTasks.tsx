@@ -11,7 +11,10 @@ import { Todo } from "@/features/todo/types"
 import { isEmpty } from "lodash"
 
 const TodoTasks = () => {
-  const { data: todoTasks, loading } = useGetTodos({ is_done: false })
+  const { data: todoTasks, loading } = useGetTodos({
+    is_done: false,
+    priority_order: "asc",
+  })
 
   const [deleteTodo, { loading: deleteLoading }] = useDeleteTodo()
 

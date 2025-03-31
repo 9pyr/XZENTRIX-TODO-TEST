@@ -12,4 +12,5 @@ export interface GetTodosResponse {
 
 export interface TodoVariables {
   is_done: boolean
+  priority_order?: "asc" | "desc"
 }
