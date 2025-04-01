@@ -3,7 +3,6 @@ import { gql } from "@apollo/client"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import NextAuth, { User } from "next-auth"
-import { HasuraAdapter } from "next-auth-hasura-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 const GET_USER_QUERY = gql`
@@ -15,6 +14,8 @@ const GET_USER_QUERY = gql`
     }
   }
 `
+
+const EXPIRED_TIME = 60 * 60
 
 interface ExtendedUser extends User {
   accessToken?: string
@@ -43,7 +44,7 @@ const handler = NextAuth({
           throw new Error("Missing credentials")
         }
 
-        const { email, password } = credentials!
+        const { email, password } = credentials
 
         if (!email || !password) {
           throw new Error("Email and password are required")
@@ -73,11 +74,13 @@ const handler = NextAuth({
             "https://hasura.io/jwt/claims": {
               "x-hasura-allowed-roles": ["user"],
               "x-hasura-default-role": "user",
-              "x-hasura-user-id": user.id,
+              "x-hasura-user-id": user.email,
             },
           },
-          process.env.NEXTAUTH_SECRET!,
-          { expiresIn: "1h" }
+          process.env.NEXTAUTH_SECRET as string,
+          {
+            expiresIn: EXPIRED_TIME,
+          }
         )
 
         return {
@@ -88,10 +91,6 @@ const handler = NextAuth({
       },
     }),
   ],
-  adapter: HasuraAdapter({
-    endpoint: process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT!,
-    adminSecret: process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET!,
-  }),
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -112,8 +111,8 @@ const handler = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60,
-    updateAge: 60 * 60,
+    maxAge: EXPIRED_TIME,
+    updateAge: EXPIRED_TIME,
   },
   secret: process.env.NEXTAUTH_SECRET,
 })

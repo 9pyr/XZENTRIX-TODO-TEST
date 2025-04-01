@@ -1,6 +1,7 @@
 import serverApollo from "@/lib/apolloServer"
 import { gql } from "@apollo/client"
 import bcrypt from "bcryptjs"
+import { NextRequest } from "next/server"
 
 const REGISTER_USER = gql`
   mutation RegisterUser($email: String!, $password: String!) {
@@ -11,7 +12,7 @@ const REGISTER_USER = gql`
   }
 `
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json()
 
