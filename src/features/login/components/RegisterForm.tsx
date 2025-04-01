@@ -13,7 +13,6 @@ import useRegister from "@/features/login/hooks/useRegister"
 import { RegisterFormData } from "@/features/login/types"
 import { RegisterSchema } from "@/features/login/utils/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import bcrypt from "bcryptjs"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 
@@ -30,9 +29,7 @@ const RegisterForm = ({ setTab }: RegisterFormProps) => {
     const { email, password } = values
 
     try {
-      const hashedPassword = await bcrypt.hash(password, 10)
-
-      await mutateAsync({ email, password: hashedPassword })
+      await mutateAsync({ email, password })
 
       setTab("login")
       toast.success("Registration successful")
