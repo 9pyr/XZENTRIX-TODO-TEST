@@ -25,8 +25,8 @@ const LoginForm = () => {
       redirect: false,
     })
 
-    if (!res?.ok) {
-      toast.error("Invalid email or password")
+    if (res?.error) {
+      toast.error(res.error)
     } else {
       toast.success("Login successful")
       redirect("/")
