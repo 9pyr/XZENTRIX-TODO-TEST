@@ -44,7 +44,12 @@ const LoginForm = () => {
         </CardHeader>
         <CardContent className="space-y-2">
           <InputField name="email" label="Email" required />
-          <InputField name="password" label="Password" required />
+          <InputField
+            name="password"
+            label="Password"
+            type="password"
+            required
+          />
         </CardContent>
         <CardFooter>
           <Button type="submit">Login</Button>

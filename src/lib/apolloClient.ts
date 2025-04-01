@@ -33,6 +33,7 @@ const wsLink = new GraphQLWsLink(
 const authLink = setContext(async (_, { headers }) => {
   const session = await getSession()
   const token = session?.accessToken
+
   return {
     headers: {
       ...headers,
@@ -49,7 +50,7 @@ const splitLink = split(
       definition.operation === "subscription"
     )
   },
-  wsLink,
+  authLink.concat(wsLink),
   authLink.concat(httpLink)
 )
 

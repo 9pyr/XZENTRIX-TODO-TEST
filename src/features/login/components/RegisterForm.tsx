@@ -22,10 +22,9 @@ interface RegisterFormProps {
 }
 
 const RegisterForm = ({ setTab }: RegisterFormProps) => {
-  const { mutateAsync, isPending, isError, error } = useRegister()
+  const { mutateAsync, isPending } = useRegister()
 
   if (isPending) return <OverlayLoading />
-  if (isError) return <p>Error: {error.message}</p>
 
   const handleRegister = async (values: RegisterFormData) => {
     const { email, password } = values
@@ -59,10 +58,16 @@ const RegisterForm = ({ setTab }: RegisterFormProps) => {
         </CardHeader>
         <CardContent className="space-y-2">
           <InputField name="email" label="Email" required />
-          <InputField name="password" label="Password" required />
+          <InputField
+            name="password"
+            label="Password"
+            type="password"
+            required
+          />
           <InputField
             name="confirmPassword"
             label="Confirm Password"
+            type="password"
             required
           />
         </CardContent>

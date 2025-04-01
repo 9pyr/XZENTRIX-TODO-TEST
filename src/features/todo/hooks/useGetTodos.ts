@@ -9,7 +9,7 @@ export const GET_TODOS = gql`
   ) {
     todos(
       where: { is_done: { _eq: $is_done } }
-      order_by: { update_at: asc, priority: $priority_order }
+      order_by: [{ priority: $priority_order }, { update_at: asc }]
     ) {
       id
       title

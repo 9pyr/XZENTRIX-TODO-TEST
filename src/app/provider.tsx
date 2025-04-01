@@ -1,6 +1,6 @@
 "use client"
 
-import client from "@/lib/apolloClient"
+import apolloClient from "@/lib/apolloClient"
 import { ApolloProvider } from "@apollo/client"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { SessionProvider } from "next-auth/react"
@@ -11,9 +11,11 @@ const Provider = ({ children }: React.PropsWithChildren) => {
 
   return (
     <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        <ApolloProvider client={client}>{children}</ApolloProvider>
-      </QueryClientProvider>
+      <ApolloProvider client={apolloClient}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </ApolloProvider>
     </SessionProvider>
   )
 }

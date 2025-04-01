@@ -9,9 +9,10 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import * as React from "react"
 import { useFormContext } from "react-hook-form"
 
-interface InputFieldProps {
+interface InputFieldProps extends React.ComponentProps<"input"> {
   name: string
   label: string
   required?: boolean
@@ -25,6 +26,7 @@ const InputField = ({
   required,
   placeholder,
   disabled,
+  ...props
 }: InputFieldProps) => {
   const { control } = useFormContext()
 
@@ -43,6 +45,7 @@ const InputField = ({
             </FormLabel>
             <FormControl>
               <Input
+                {...props}
                 placeholder={placeholder}
                 {...field}
                 value={field.value ?? ""}

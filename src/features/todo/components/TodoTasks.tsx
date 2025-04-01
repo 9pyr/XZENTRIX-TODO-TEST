@@ -47,6 +47,7 @@ const TodoTasks = () => {
           title,
           description,
           priority,
+          update_at: new Date().toISOString(),
         },
       })
     }

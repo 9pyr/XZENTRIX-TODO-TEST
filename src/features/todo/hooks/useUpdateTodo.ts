@@ -7,10 +7,16 @@ export const UPDATE_TODO = gql`
     $title: String!
     $description: String!
     $priority: String!
+    $update_at: timestamptz!
   ) {
     update_todos(
       where: { id: { _eq: $id } }
-      _set: { title: $title, description: $description, priority: $priority }
+      _set: {
+        title: $title
+        description: $description
+        priority: $priority
+        update_at: $update_at
+      }
     ) {
       returning {
         id
