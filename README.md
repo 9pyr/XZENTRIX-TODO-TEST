@@ -31,3 +31,5 @@ run project
 ```sh
 yarn dev
 ```
+
+Open http://localhost:3000 on your browser
