@@ -74,7 +74,7 @@ const handler = NextAuth({
             "https://hasura.io/jwt/claims": {
               "x-hasura-allowed-roles": ["user"],
               "x-hasura-default-role": "user",
-              "x-hasura-user-id": user.email,
+              "x-hasura-user-id": user.id,
             },
           },
           process.env.NEXTAUTH_SECRET as string,
